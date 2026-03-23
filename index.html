@@ -3,96 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS KERNEL | OWNER EDITION</title>
+    <title>NEXUS KERNEL | BY HANZ X</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
         :root { --neon: #00f2ff; --admin: #ff003c; --bg: #050505; }
         body { background: var(--bg); color: var(--neon); font-family: 'Share Tech Mono', monospace; overflow-x: hidden; margin: 0; }
         .cyber-font { font-family: 'Orbitron', sans-serif; }
-        .screen { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: var(--bg); z-index: 10; }
+        .screen { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: var(--bg); z-index: 100; }
         .active { display: flex; }
-        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
-        .admin-border { border: 1px solid var(--admin); box-shadow: 0 0 10px rgba(255, 0, 60, 0.2); }
-        input, select { background: rgba(0,0,0,0.8); border: 1px solid var(--neon); color: white; padding: 10px; outline: none; font-size: 12px; width: 100%; }
-        .btn-cyber { background: var(--neon); color: black; font-weight: bold; width: 100%; padding: 10px; cursor: pointer; text-transform: uppercase; clip-path: polygon(5% 0, 100% 0, 100% 75%, 95% 100%, 0 100%, 0 25%); }
-        .btn-red { background: var(--admin); color: white; clip-path: polygon(5% 0, 100% 0, 100% 75%, 95% 100%, 0 100%, 0 25%); }
+        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+        .admin-border { border: 1px solid var(--admin); box-shadow: 0 0 15px rgba(255, 0, 60, 0.3); }
+        input, select { background: rgba(0,0,0,0.9); border: 1px solid var(--neon); color: white; padding: 12px; outline: none; font-size: 12px; width: 100%; }
+        .btn-cyber { background: var(--neon); color: black; font-weight: bold; width: 100%; padding: 12px; cursor: pointer; text-transform: uppercase; clip-path: polygon(5% 0, 100% 0, 100% 80%, 95% 100%, 0 100%, 0 20%); }
+        .btn-red { background: var(--admin); color: white; clip-path: polygon(5% 0, 100% 0, 100% 80%, 95% 100%, 0 100%, 0 20%); }
         table { width: 100%; border-collapse: collapse; font-size: 10px; color: white; }
-        th { background: var(--admin); color: white; padding: 5px; text-align: left; }
-        td { border-bottom: 1px solid #222; padding: 5px; }
+        th { background: var(--admin); color: white; padding: 8px; text-align: left; border: 1px solid #333; }
+        td { border: 1px solid #222; padding: 8px; background: rgba(0,0,0,0.5); }
+        .info-box { background: rgba(0, 242, 255, 0.05); border: 1px dashed var(--neon); padding: 10px; margin-bottom: 20px; font-size: 11px; }
     </style>
 </head>
 <body>
 
 <div id="sc-load" class="screen active">
-    <div class="cyber-font text-4xl mb-4 animate-pulse">NEXUS_CORE</div>
-    <div class="w-64 h-1 bg-gray-900"><div id="bar" class="h-full bg-cyan-400 w-0 shadow-[0_0_10px_cyan]"></div></div>
-    <p class="mt-4 text-[10px] tracking-[5px]">BYPASSING DATABASE...</p>
+    <div class="cyber-font text-5xl mb-2 animate-pulse">NEXUS_KERNEL</div>
+    <div class="w-72 h-1 bg-zinc-900 relative">
+        <div id="bar" class="h-full bg-cyan-500 w-0 shadow-[0_0_15px_cyan]"></div>
+    </div>
+    <p class="mt-4 text-[9px] text-green-500 tracking-[5px]">VERIFYING LICENSES...</p>
 </div>
 
 <div id="sc-auth" class="screen">
-    <div class="bg-black/90 p-8 neon-border w-[320px]">
-        <h2 id="auth-title" class="cyber-font text-center mb-6 text-xl">LOGIN_ID</h2>
-        <div class="flex flex-col gap-4">
+    <div class="bg-black/95 p-10 neon-border w-[350px]">
+        <h2 id="auth-title" class="cyber-font text-center mb-8 text-2xl tracking-widest">LOGIN_NODE</h2>
+        <div class="flex flex-col gap-5">
             <input type="text" id="usn" placeholder="USERNAME">
             <input type="password" id="pw" placeholder="PASSWORD">
-            <button onclick="handleAuth()" id="btn-main" class="btn-cyber">VERIFY</button>
-            <button onclick="toggleAuth()" class="text-[9px] opacity-40 underline">REGISTER NEW NODE</button>
+            <button onclick="handleAuth()" id="btn-main" class="btn-cyber mt-2">ACCESS SYSTEM</button>
+            <button onclick="toggleAuth()" class="text-[9px] opacity-40 uppercase">Register New ID</button>
         </div>
-        <p class="text-[8px] text-center mt-6 opacity-30">HANZX DEV | GITHUB.COM/ARELXITER</p>
     </div>
 </div>
 
 <div id="sc-user" class="screen p-6 justify-start overflow-y-auto">
-    <div class="w-full max-w-lg border-b border-cyan-900 pb-4 mb-6 flex justify-between items-center">
-        <h1 class="cyber-font text-xl">MEMBER_DASHBOARD</h1>
-        <button onclick="location.reload()" class="text-red-500 text-[10px] border border-red-900 px-2">LOGOUT</button>
+    <div class="w-full max-w-lg border-b border-cyan-900 pb-5 mb-4 flex justify-between items-center mt-5">
+        <h1 class="cyber-font text-2xl">MEMBER_HUB</h1>
+        <button onclick="location.reload()" class="text-red-500 text-[10px] border border-red-600 px-3 py-1">LOGOUT</button>
     </div>
+    
+    <div class="w-full max-w-lg info-box">
+        <span class="text-cyan-400 font-bold">NODE STATUS:</span> <span class="text-white">AUTHORIZED</span><br>
+        <span class="text-cyan-400 font-bold">EXPIRED DATE:</span> <span id="exp-user" class="text-yellow-400">---</span>
+    </div>
+
     <div class="w-full max-w-lg grid gap-3">
-        <button onclick="runTool('PELICIN LAYAR')" class="p-4 bg-zinc-950 border border-cyan-900 text-left hover:bg-cyan-900/20">PELICIN LAYAR 100%</button>
-        <button onclick="runTool('EASY DRAG 66%')" class="p-4 bg-zinc-950 border border-cyan-900 text-left hover:bg-cyan-900/20">EASY DRAG 66%</button>
-        <button onclick="runTool('FPS STABILIZER')" class="p-4 bg-zinc-950 border border-cyan-900 text-left hover:bg-cyan-900/20">FPS STABILIZER</button>
+        <button onclick="runTool('PELICIN LAYAR')" class="p-4 bg-zinc-950 border border-zinc-800 hover:border-cyan-500 text-left text-xs font-bold uppercase">PELICIN LAYAR 100%</button>
+        <button onclick="runTool('EASY DRAG')" class="p-4 bg-zinc-950 border border-zinc-800 hover:border-cyan-500 text-left text-xs font-bold uppercase">EASY DRAG 66%</button>
         <div class="grid grid-cols-2 gap-4 mt-4">
-            <button onclick="openGame('max')" class="p-4 bg-red-900/30 border border-red-600 text-xs font-bold cyber-font">OPEN FF MAX</button>
-            <button onclick="openGame('normal')" class="p-4 bg-blue-900/30 border border-blue-600 text-xs font-bold cyber-font">OPEN FF NORMAL</button>
+            <button onclick="openGame('max')" class="p-4 bg-red-900/20 border border-red-600 text-xs font-bold cyber-font">OPEN FF MAX</button>
+            <button onclick="openGame('normal')" class="p-4 bg-blue-900/20 border border-blue-600 text-xs font-bold cyber-font">OPEN FF NORMAL</button>
         </div>
     </div>
 </div>
 
-<div id="sc-admin" class="screen p-4 justify-start overflow-y-auto block bg-black">
-    <div class="w-full border-b-2 border-red-600 pb-2 mb-4 flex justify-between items-center mt-4">
-        <h1 class="cyber-font text-xl text-red-500">OWNER_PANEL_V2</h1>
-        <button onclick="location.reload()" class="bg-red-700 text-white px-3 py-1 text-[10px]">LOGOUT</button>
+<div id="sc-admin" class="screen p-6 justify-start overflow-y-auto bg-black">
+    <div class="w-full border-b-2 border-red-600 pb-3 mb-4 flex justify-between items-center mt-5">
+        <h1 class="cyber-font text-2xl text-red-600">OWNER_CENTRAL</h1>
+        <button onclick="location.reload()" class="bg-red-700 text-white px-4 py-1 text-xs font-bold">LOGOUT</button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="p-4 admin-border bg-zinc-950 space-y-3">
-            <h3 class="text-xs text-red-500 font-bold uppercase">Generate New Key</h3>
+    <div class="w-full info-box !border-red-600">
+        <span class="text-red-500 font-bold">OWNER NODE:</span> <span class="text-white">ACTIVE</span><br>
+        <span class="text-red-500 font-bold">OWNER EXPIRY:</span> <span id="exp-admin" class="text-yellow-400">---</span>
+    </div>
+
+    <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 p-5 admin-border bg-zinc-950 space-y-4">
+            <h3 class="text-xs text-red-500 font-bold uppercase tracking-widest mb-2">Create New License</h3>
             <input type="text" id="new-u" placeholder="New Username">
             <input type="password" id="new-p" placeholder="New Password">
             <select id="new-r">
-                <option value="user">ROLE: MEMBER</option>
-                <option value="admin">ROLE: OWNER</option>
+                <option value="user">MEMBER</option>
+                <option value="admin">OWNER</option>
             </select>
             <input type="date" id="new-e">
-            <button onclick="createAccount()" class="btn-red w-full py-2 text-xs font-bold">CREATE ACCOUNT</button>
+            <button onclick="createAccount()" class="btn-red w-full py-3 text-sm font-black uppercase">Generate Node</button>
         </div>
 
-        <div class="p-4 admin-border bg-zinc-950 overflow-hidden">
-            <h3 class="text-xs text-cyan-500 font-bold mb-2 uppercase">Database: Account List</h3>
-            <div class="max-h-[200px] overflow-y-auto border border-zinc-800">
+        <div class="lg:col-span-8 p-5 admin-border bg-zinc-900 overflow-hidden">
+            <h3 class="text-xs text-cyan-400 font-bold mb-3 uppercase tracking-widest">Database List</h3>
+            <div class="overflow-x-auto max-h-[300px] border border-zinc-800">
                 <table id="user-table">
-                    <thead><tr><th>User</th><th>Pass</th><th>Role</th><th>Exp</th><th>Act</th></tr></thead>
+                    <thead>
+                        <tr><th>IDENT_NAME</th><th>SEC_KEY</th><th>ACCESS</th><th>EXP_DATE</th><th>ACTION</th></tr>
+                    </thead>
                     <tbody id="user-list-body"></tbody>
                 </table>
-            </div>
-        </div>
-
-        <div class="p-4 admin-border bg-zinc-950 col-span-full">
-            <h3 class="text-xs text-yellow-500 font-bold mb-2 uppercase">Broadcast & Status</h3>
-            <div class="flex gap-2">
-                <input type="text" id="bc-msg" placeholder="Global message..." class="flex-1">
-                <button onclick="alert('Broadcast Sent!')" class="bg-yellow-600 text-black px-4 py-1 text-xs font-bold">SEND</button>
             </div>
         </div>
     </div>
@@ -101,36 +107,25 @@
 <script>
     const DB_KEY = 'nexus_official_db';
     
-    // Inisialisasi Database Default jika kosong
     if(!localStorage.getItem(DB_KEY)) {
         localStorage.setItem(DB_KEY, JSON.stringify([
-            {u: "hanzX", p: "rehanganteng", r: "admin", e: "2030-12-31"},
-            {u: "member1", p: "123", r: "user", e: "2026-01-01"}
+            {u: "hanzX", p: "rehanganteng", r: "admin", e: "2030-12-31"}
         ]));
     }
 
-    // --- SCREEN CONTROLLER ---
     function show(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).style.display = (id === 'sc-admin' || id === 'sc-user') ? 'block' : 'flex';
         document.getElementById(id).classList.add('active');
         if(id === 'sc-admin') renderUserList();
     }
 
-    // --- LOADING ---
     window.onload = () => {
+        show('sc-load');
         let b = document.getElementById('bar'), p = 0;
         let itv = setInterval(() => {
-            p += 4; b.style.width = p+'%';
+            p += 2; b.style.width = p+'%';
             if(p >= 100) { clearInterval(itv); show('sc-auth'); }
         }, 30);
-    }
-
-    // --- AUTH LOGIC ---
-    let isReg = false;
-    function toggleAuth() {
-        isReg = !isReg;
-        document.getElementById('auth-title').innerText = isReg ? "REGISTER_NODE" : "LOGIN_ID";
     }
 
     function handleAuth() {
@@ -138,21 +133,24 @@
         const p = document.getElementById('pw').value;
         const db = JSON.parse(localStorage.getItem(DB_KEY));
 
-        if(isReg) {
-            if(db.find(x => x.u === u)) return alert("Username terpakai!");
-            db.push({u: u, p: p, r: "user", e: "2026-12-31"});
-            localStorage.setItem(DB_KEY, JSON.stringify(db));
-            alert("Berhasil Daftar!"); toggleAuth();
-        } else {
-            const user = db.find(x => x.u === u && x.p === p);
-            if(user) {
-                if(user.r === 'admin') show('sc-admin');
-                else show('sc-user');
-            } else { alert("ACCESS DENIED!"); }
-        }
+        const user = db.find(x => x.u === u && x.p === p);
+        if(user) {
+            // CEK EXPIRED
+            const now = new Date();
+            const exp = new Date(user.e);
+            if(now > exp) return alert("⛔ AKUN EXPIRED! Silakan hubungi Owner (hanzX).");
+
+            // SET INFORMASI EXP KE PANEL
+            if(user.r === 'admin') {
+                document.getElementById('exp-admin').innerText = user.e;
+                show('sc-admin');
+            } else {
+                document.getElementById('exp-user').innerText = user.e;
+                show('sc-user');
+            }
+        } else { alert("ACCESS DENIED: Data Salah!"); }
     }
 
-    // --- ADMIN ENGINE (WORK 100%) ---
     function renderUserList() {
         const db = JSON.parse(localStorage.getItem(DB_KEY));
         const body = document.getElementById('user-list-body');
@@ -160,12 +158,12 @@
         db.forEach((user, index) => {
             body.innerHTML += `
                 <tr>
-                    <td>${user.u}</td>
-                    <td>${user.p}</td>
-                    <td class="${user.r === 'admin' ? 'text-red-500' : 'text-green-500'}">${user.r.toUpperCase()}</td>
-                    <td>${user.e}</td>
+                    <td class="font-bold text-white">${user.u}</td>
+                    <td class="opacity-40">${user.p}</td>
+                    <td><span class="${user.r === 'admin' ? 'text-red-500' : 'text-green-500'} font-bold uppercase text-[9px]">${user.r}</span></td>
+                    <td class="text-zinc-500">${user.e}</td>
                     <td>
-                        ${user.u !== 'hanzX' ? `<button onclick="deleteUser(${index})" class="text-red-500 font-bold">[X]</button>` : '-'}
+                        ${user.u !== 'hanzX' ? `<button onclick="deleteUser(${index})" class="text-red-500 font-bold hover:underline">[DELETE]</button>` : '<span class="opacity-20">LOCKED</span>'}
                     </td>
                 </tr>
             `;
@@ -173,23 +171,18 @@
     }
 
     function createAccount() {
-        const u = document.getElementById('new-u').value;
-        const p = document.getElementById('new-p').value;
-        const r = document.getElementById('new-r').value;
-        const e = document.getElementById('new-e').value;
-        if(!u || !p || !e) return alert("Harap isi semua kolom!");
-
+        const u = document.getElementById('new-u').value, p = document.getElementById('new-p').value,
+              r = document.getElementById('new-r').value, e = document.getElementById('new-e').value;
+        if(!u || !p || !e) return alert("Isi semua data!");
         const db = JSON.parse(localStorage.getItem(DB_KEY));
-        db.push({u: u, p: p, r: r, e: e});
+        db.push({u, p, r, e});
         localStorage.setItem(DB_KEY, JSON.stringify(db));
-        alert("ACCOUNT SUCCESS CREATED!");
-        renderUserList(); // Update List Otomatis
-        document.getElementById('new-u').value = '';
-        document.getElementById('new-p').value = '';
+        alert("ACCOUNT GENERATED!");
+        renderUserList();
     }
 
     function deleteUser(index) {
-        if(confirm("Hapus akun ini dari database?")) {
+        if(confirm("Hapus akun?")) {
             const db = JSON.parse(localStorage.getItem(DB_KEY));
             db.splice(index, 1);
             localStorage.setItem(DB_KEY, JSON.stringify(db));
@@ -197,9 +190,8 @@
         }
     }
 
-    // --- GAME ENGINE ---
     function openGame(type) {
-        alert("SISTEM: Menjalankan Game...");
+        alert("OPENING GAME...");
         window.location.href = type === 'max' 
             ? "intent://#Intent;package=com.dts.freefiremax;end" 
             : "intent://#Intent;package=com.dts.freefireth;end";
