@@ -7,278 +7,207 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap');
-
-        :root {
-            --neon-cyan: #00f2ff;
-            --admin-red: #ff003c;
-        }
-
-        body {
-            background-color: #050505;
-            color: var(--neon-cyan);
-            font-family: 'JetBrains Mono', monospace;
-            overflow-x: hidden;
-            margin: 0;
-        }
-
+        :root { --neon: #00f2ff; --admin: #ff003c; }
+        body { background: #050505; color: var(--neon); font-family: 'JetBrains Mono', monospace; overflow: hidden; }
         .cyber-font { font-family: 'Orbitron', sans-serif; }
-        
-        .neon-border {
-            border: 1px solid var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-        }
-
-        .neon-text { text-shadow: 0 0 10px var(--neon-cyan); }
-
-        /* Global Alert Style */
-        #global-alert {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid var(--admin-red);
-            padding: 15px 30px;
-            z-index: 999;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
-            animation: slideDown 0.5s ease;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        @keyframes slideDown {
-            from { top: -100px; opacity: 0; }
-            to { top: 20px; opacity: 1; }
-        }
-
-        .screen { display: none; }
+        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
+        .admin-border { border: 1px solid var(--admin); box-shadow: 0 0 15px rgba(255, 0, 60, 0.2); }
+        .screen { display: none; height: 100vh; width: 100vw; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: #050505; }
         .active { display: flex; }
-
-        input, textarea {
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--neon-cyan);
-            color: white;
-            padding: 12px;
-            outline: none;
-            font-size: 0.8rem;
-        }
-
-        input:focus, textarea:focus { border-color: white; }
-
-        button {
-            transition: all 0.3s;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .btn-admin { background-color: var(--admin-red); color: white; }
-        .btn-user { background-color: var(--neon-cyan); color: black; }
+        input, select { background: rgba(0,0,0,0.7); border: 1px solid var(--neon); color: white; padding: 10px; outline: none; font-size: 12px; }
+        .btn-neon { background: var(--neon); color: black; font-weight: bold; transition: 0.3s; }
+        .btn-neon:hover { background: white; box-shadow: 0 0 20px var(--neon); }
+        .btn-admin { background: var(--admin); color: white; font-weight: bold; }
+        /* Global Alert */
+        #gb-alert { display: none; position: fixed; top: 20px; width: 90%; max-width: 400px; background: rgba(255,0,60,0.9); border: 1px solid white; padding: 15px; z-index: 1000; color: white; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="global-alert" class="flex-col items-center text-center">
-    <span class="text-[10px] text-red-500 font-bold mb-1 cyber-font">[ BROADCAST FROM ADMIN ]</span>
-    <p id="alert-text" class="text-white text-sm font-bold uppercase mb-3"></p>
-    <button onclick="closeAlert()" class="text-[10px] bg-white/10 hover:bg-white/20 text-white px-4 py-1 border border-white/20">ACKNOWLEDGE</button>
+<div id="gb-alert" class="cyber-font">
+    <div id="gb-text">SYSTEM MESSAGE</div>
+    <button onclick="document.getElementById('gb-alert').style.display='none'" class="text-[8px] mt-2 underline">CLOSE</button>
 </div>
 
-<div id="screen-load" class="screen active fixed inset-0 flex-col items-center justify-center bg-black z-[200]">
-    <div class="relative mb-10">
-        <h1 class="cyber-font text-5xl font-bold neon-text tracking-tighter">NEXUS_KERNEL</h1>
-        <div class="absolute -bottom-2 left-0 w-full h-1 bg-cyan-900 overflow-hidden">
-            <div id="load-bar" class="h-full bg-cyan-400 w-0 transition-all duration-100"></div>
-        </div>
-    </div>
-    <p id="load-text" class="text-[10px] tracking-[0.5em] animate-pulse">BOOTING SYSTEM...</p>
+<div id="sc-load" class="screen active">
+    <h1 class="cyber-font text-4xl neon-text mb-4 animate-pulse">NEXUS_KERNEL</h1>
+    <div class="w-64 h-1 bg-gray-900 overflow-hidden"><div id="bar" class="h-full bg-cyan-400 w-0 transition-all"></div></div>
+    <p id="tx-load" class="mt-4 text-[10px] tracking-widest">STABILIZING CORE...</p>
 </div>
 
-<div id="screen-auth" class="screen fixed inset-0 flex-col items-center justify-center">
+<div id="sc-auth" class="screen">
     <div class="bg-black/90 p-8 neon-border w-[320px]">
-        <h2 class="cyber-font text-xl text-center mb-8 neon-text uppercase">Security Access</h2>
-        <div class="flex flex-col gap-4">
+        <h2 id="auth-title" class="cyber-font text-center mb-6 neon-text">LOGIN ACCESS</h2>
+        <div id="auth-form" class="flex flex-col gap-4">
             <input type="text" id="usn" placeholder="USERNAME">
             <input type="password" id="pw" placeholder="PASSWORD">
-            <button onclick="doLogin()" class="btn-user py-3 hover:bg-white">Enter Nexus</button>
-            <div class="flex justify-between text-[8px] opacity-40">
-                <span>V2.0 STABLE</span>
-                <span>BY HANZ X DEV</span>
-            </div>
+            <button onclick="handleAuth()" id="btn-main" class="btn-neon py-3">ACCESS SYSTEM</button>
+            <button onclick="toggleAuth()" id="btn-switch" class="text-[10px] opacity-50 underline">Belum punya akun? Register</button>
         </div>
     </div>
 </div>
 
-<div id="screen-working" class="screen fixed inset-0 flex-col items-center justify-center bg-black/98 z-[150]">
-    <div id="work-ui" class="text-center"></div>
-</div>
-
-<div id="screen-user" class="screen flex-col p-6 w-full max-w-lg mx-auto overflow-y-auto">
-    <div class="border-b border-cyan-900 pb-4 mb-6 flex justify-between items-end">
+<div id="sc-user" class="screen p-6 overflow-y-auto block">
+    <div class="flex justify-between border-b border-cyan-900 pb-4 mb-6">
         <div>
-            <h1 class="cyber-font text-2xl neon-text">USER_PANEL</h1>
-            <p class="text-[10px] text-gray-500">Node: <span class="text-green-500">CONNECTED</span></p>
+            <h1 class="cyber-font text-xl neon-text">USER_PANEL</h1>
+            <p id="user-info" class="text-[10px] text-gray-400"></p>
         </div>
-        <button onclick="location.reload()" class="text-[10px] text-red-500 border border-red-900 px-2 py-1">LOGOUT</button>
+        <button onclick="location.reload()" class="text-red-500 text-xs border border-red-900 px-2">LOGOUT</button>
     </div>
-
     <div class="grid grid-cols-1 gap-3">
-        <button onclick="execTool('PELICIN LAYAR', 'MATRIX')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
-            <span>[1] TOOLS PELICIN LAYAR</span> <span class="text-cyan-500">ENABLE</span>
-        </button>
-        <button onclick="execTool('EASY DRAG 66%', 'SCAN')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
-            <span>[2] EASY DRAG 66%</span> <span class="text-cyan-500">ENABLE</span>
-        </button>
-        <button onclick="execTool('SENSIBILITY SCREEN', 'HEX')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
-            <span>[3] SENSIBILITY SCREEN</span> <span class="text-cyan-500">ENABLE</span>
-        </button>
-        <button onclick="execTool('FPS CONTROLLER', 'PULSE')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
-            <span>[4] FPS CONTROLLER (ANTI LAG)</span> <span class="text-cyan-500">ENABLE</span>
-        </button>
-        <button onclick="execTool('SMOOTH AIM', 'TARGET')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
-            <span>[5] SMOOTH AIM</span> <span class="text-cyan-500">ENABLE</span>
-        </button>
-        <div class="grid grid-cols-2 gap-2 mt-2">
-            <button onclick="execTool('FREE FIRE MAX', 'GAME')" class="p-3 bg-red-900/20 border border-red-600 text-[10px]">OPEN FF MAX</button>
-            <button onclick="execTool('FREE FIRE NORMAL', 'GAME')" class="p-3 bg-blue-900/20 border border-blue-600 text-[10px]">OPEN FF NORMAL</button>
+        <button onclick="runTool('PELICIN LAYAR')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[1] TOOLS PELICIN LAYAR</button>
+        <button onclick="runTool('EASY DRAG 66%')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[2] EASY DRAG 66%</button>
+        <button onclick="runTool('FPS CONTROLLERS')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[3] FPS CONTROLLERS (ANTI LAG)</button>
+        <button onclick="runTool('SMOOTH AIM')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[4] SMOOTH AIM</button>
+        <div class="grid grid-cols-2 gap-2">
+            <button onclick="runTool('FF MAX')" class="p-3 bg-red-900/20 border border-red-600 text-xs">OPEN FF MAX</button>
+            <button onclick="runTool('FF NORMAL')" class="p-3 bg-blue-900/20 border border-blue-600 text-xs">OPEN FF NORMAL</button>
         </div>
     </div>
 </div>
 
-<div id="screen-admin" class="screen flex-col p-6 w-full max-w-4xl mx-auto overflow-y-auto">
-    <div class="border-b-2 border-red-600 pb-2 mb-6 flex justify-between items-center">
-        <h1 class="cyber-font text-3xl text-red-500">ADMIN_CENTRAL</h1>
-        <button onclick="location.reload()" class="text-xs text-white border px-3 py-1">LOGOUT</button>
+<div id="sc-admin" class="screen p-6 overflow-y-auto block">
+    <h1 class="cyber-font text-2xl text-red-500 mb-6 border-b-2 border-red-600">OWNER_CENTRAL</h1>
+    <div class="grid gap-4">
+        <div class="p-4 admin-border bg-zinc-950 space-y-3">
+            <h3 class="text-xs font-bold text-red-500">CREATE ACCOUNT (MEMBER/OWNER)</h3>
+            <input type="text" id="new-u" placeholder="New Username" class="w-full border-red-900">
+            <input type="password" id="new-p" placeholder="New Password" class="w-full border-red-900">
+            <select id="new-r" class="w-full border-red-900 bg-black">
+                <option value="user">ROLE: MEMBER</option>
+                <option value="admin">ROLE: OWNER</option>
+            </select>
+            <input type="date" id="new-e" class="w-full border-red-900">
+            <button onclick="createAccount()" class="w-full btn-admin py-2">GENERATE KEY</button>
+        </div>
+        <div class="p-4 admin-border bg-zinc-950">
+            <h3 class="text-xs font-bold text-cyan-500 mb-2">PESAN GLOBAL</h3>
+            <input type="text" id="msg-input" placeholder="Tulis pesan..." class="w-full mb-2 border-cyan-900">
+            <button onclick="sendGlobal()" class="w-full bg-cyan-700 text-black font-bold py-1">KIRIM PESAN</button>
+        </div>
+        <button onclick="toggleSrv()" id="srv-btn" class="p-3 bg-green-900 border border-green-500 text-xs">SERVER: ONLINE</button>
     </div>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-zinc-950 p-4 border border-red-900 space-y-3">
-            <h3 class="text-xs font-bold text-red-500 uppercase">User Control</h3>
-            <input type="text" id="adm-target" placeholder="Username Target" class="w-full border-red-900">
-            <div class="grid grid-cols-2 gap-2">
-                <button onclick="adm('RESET')" class="bg-red-900 text-[10px] py-2">KEMBALI KE LOGIN</button>
-                <button onclick="adm('KICK')" class="bg-red-600 text-black text-[10px] py-2">TENDANG USER</button>
-                <button onclick="adm('INFO')" class="bg-zinc-800 text-[10px] py-2 text-white">INFO AKUN</button>
-                <button onclick="adm('EDIT')" class="bg-zinc-800 text-[10px] py-2 text-white">EDIT PASSWORD</button>
-            </div>
-        </div>
-
-        <div class="bg-zinc-950 p-4 border border-cyan-600 space-y-3">
-            <h3 class="text-xs font-bold text-cyan-500 uppercase">Broadcast Message</h3>
-            <textarea id="global-msg" placeholder="Tulis pesan global..." class="w-full h-20 border-cyan-900 resize-none text-xs"></textarea>
-            <button onclick="sendGlobalMessage()" class="w-full btn-user text-xs py-2 font-bold">KIRIM KE SEMUA USER</button>
-        </div>
-
-        <div class="bg-zinc-950 p-4 border border-yellow-700 col-span-full space-y-3">
-            <h3 class="text-xs font-bold text-yellow-600 uppercase">Create License (Admin/User)</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                <input type="text" placeholder="Username" class="border-yellow-900">
-                <input type="password" placeholder="Password" class="border-yellow-900">
-                <input type="date" class="border-yellow-900 text-white">
-            </div>
-            <button onclick="adm('CREATE')" class="w-full bg-yellow-600 text-black text-xs py-2 uppercase font-bold">CREATE LICENSE</button>
-        </div>
-
-        <div class="bg-zinc-900 p-4 border border-blue-900 col-span-full flex items-center justify-between">
-            <span class="text-xs">SERVER CORE: <b id="srv-stat" class="text-green-500">ONLINE</b></span>
-            <button onclick="toggleSrv()" class="bg-blue-900 px-4 py-1 text-xs text-white">SERVER TOGGLE</button>
-        </div>
-    </div>
+<div id="sc-work" class="screen bg-black/95 z-[999]">
+    <div id="work-box" class="text-center"></div>
 </div>
 
 <script>
-    const screens = ['screen-load', 'screen-auth', 'screen-user', 'screen-admin', 'screen-working'];
-    
-    function showScreen(id) {
-        screens.forEach(s => document.getElementById(s).style.display = 'none');
-        document.getElementById(id).style.display = 'flex';
+    // --- DATABASE (Local Storage) ---
+    if(!localStorage.getItem('nexus_users')) {
+        const initialUsers = [{u: "hanzX", p: "rehanganteng", r: "admin", e: "2099-12-31"}];
+        localStorage.setItem('nexus_users', JSON.stringify(initialUsers));
     }
 
-    // INITIAL LOADING SYSTEM
-    window.addEventListener('DOMContentLoaded', () => {
-        let bar = document.getElementById('load-bar');
-        let width = 0;
-        const interval = setInterval(() => {
-            width += 2.5;
-            bar.style.width = width + '%';
-            if(width >= 100) {
-                clearInterval(interval);
-                showScreen('screen-auth');
-            }
-        }, 40);
-    });
+    let isReg = false;
+    const getUsers = () => JSON.parse(localStorage.getItem('nexus_users'));
+    const saveUsers = (data) => localStorage.setItem('nexus_users', JSON.stringify(data));
 
-    // LOGIN AUTHENTICATION
-    function doLogin() {
+    function show(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // --- LOADING ---
+    window.onload = () => {
+        let b = document.getElementById('bar'), p = 0;
+        let itv = setInterval(() => {
+            p += 4; b.style.width = p+'%';
+            if(p >= 100) { clearInterval(itv); show('sc-auth'); checkGlobal(); }
+        }, 30);
+    }
+
+    // --- AUTH LOGIC ---
+    function toggleAuth() {
+        isReg = !isReg;
+        document.getElementById('auth-title').innerText = isReg ? "REGISTER" : "LOGIN ACCESS";
+        document.getElementById('btn-main').innerText = isReg ? "CREATE ACCOUNT" : "ACCESS SYSTEM";
+        document.getElementById('btn-switch').innerText = isReg ? "Sudah punya akun? Login" : "Belum punya akun? Register";
+    }
+
+    function handleAuth() {
         const u = document.getElementById('usn').value;
         const p = document.getElementById('pw').value;
-        if(u === "hanzX" && p === "rehanganteng") {
-            showScreen('screen-admin');
-        } else if(u !== "" && p !== "") {
-            showScreen('screen-user');
+        const db = getUsers();
+
+        if(isReg) {
+            if(db.find(x => x.u === u)) return alert("Username sudah ada!");
+            db.push({u: u, p: p, r: "user", e: "2026-12-31"});
+            saveUsers(db);
+            alert("Register Berhasil! Silakan Login.");
+            toggleAuth();
         } else {
-            alert("⚠️ Masukkan Username & Password!");
+            const user = db.find(x => x.u === u && x.p === p);
+            if(user) {
+                const now = new Date();
+                const exp = new Date(user.e);
+                if(now > exp) return alert("Akun anda sudah EXPIRED!");
+                
+                if(user.r === 'admin') {
+                    show('sc-admin');
+                } else {
+                    document.getElementById('user-info').innerText = "User: "+user.u+" | Exp: "+user.e;
+                    show('sc-user');
+                }
+            } else {
+                alert("DATA SALAH / TIDAK TERDAFTAR!");
+            }
         }
     }
 
-    // BROADCAST SYSTEM
-    function sendGlobalMessage() {
-        const msg = document.getElementById('global-msg').value;
-        if(msg === "") return alert("Pesan tidak boleh kosong!");
-        
-        // Simulasi database sync
-        alert("Pesan Terkirim Ke Seluruh Perangkat!");
-        displayGlobalAlert(msg);
+    // --- ADMIN ACTIONS ---
+    function createAccount() {
+        const u = document.getElementById('new-u').value;
+        const p = document.getElementById('new-p').value;
+        const r = document.getElementById('new-r').value;
+        const e = document.getElementById('new-e').value;
+        if(!u || !p || !e) return alert("Isi semua data!");
+
+        const db = getUsers();
+        db.push({u: u, p: p, r: r, e: e});
+        saveUsers(db);
+        alert("Account "+u+" ("+r+") Berhasil Dibuat!");
     }
 
-    function displayGlobalAlert(text) {
-        const box = document.getElementById('global-alert');
-        document.getElementById('alert-text').innerText = text;
-        box.style.display = 'flex';
+    function sendGlobal() {
+        const m = document.getElementById('msg-input').value;
+        localStorage.setItem('nexus_msg', m);
+        alert("Pesan Terkirim!");
     }
 
-    function closeAlert() {
-        document.getElementById('global-alert').style.display = 'none';
-    }
-
-    // DYNAMIC TOOL LOADERS
-    function execTool(name, type) {
-        const loader = document.getElementById('screen-working');
-        const box = document.getElementById('work-ui');
-        loader.style.display = 'flex';
-        
-        let loaderHtml = "";
-        if(type === 'MATRIX') {
-            loaderHtml = `<div class="text-green-500 text-[10px] mb-4">INJECTING_CODE...<br>010101010101</div>`;
-        } else if(type === 'SCAN') {
-            loaderHtml = `<div class="w-24 h-2 bg-cyan-900 mx-auto mb-4 overflow-hidden"><div class="h-full bg-cyan-400 animate-[ping_1s_infinite]"></div></div>`;
+    function checkGlobal() {
+        const m = localStorage.getItem('nexus_msg');
+        if(m) {
+            document.getElementById('gb-alert').style.display = 'block';
+            document.getElementById('gb-text').innerText = m;
         }
-
-        box.innerHTML = `<h2 class="text-xl cyber-font mb-4 text-white">${name}</h2>
-                         ${loaderHtml}
-                         <div class="w-12 h-12 border-2 border-t-transparent border-white rounded-full animate-spin mx-auto"></div>
-                         <p class="mt-4 text-[8px] tracking-widest uppercase">System Processing...</p>`;
-
-        setTimeout(() => {
-            loader.style.display = 'none';
-            alert("SUCCESS: " + name + " ACTIVATED");
-        }, 3000);
-    }
-
-    // ADMIN COMMANDS
-    function adm(act) {
-        const target = document.getElementById('adm-target').value || "USER_01";
-        alert("SUCCESS: Action " + act + " performed on " + target);
     }
 
     function toggleSrv() {
-        const s = document.getElementById('srv-stat');
-        s.innerText = (s.innerText === "ONLINE") ? "OFFLINE" : "ONLINE";
-        s.className = (s.innerText === "ONLINE") ? "text-green-500" : "text-red-500";
+        const b = document.getElementById('srv-btn');
+        if(b.innerText.includes("ONLINE")) {
+            b.innerText = "SERVER: OFFLINE";
+            b.className = "p-3 bg-red-900 border border-red-500 text-xs";
+        } else {
+            b.innerText = "SERVER: ONLINE";
+            b.className = "p-3 bg-green-900 border border-green-500 text-xs";
+        }
+    }
+
+    // --- USER TOOLS ---
+    function runTool(name) {
+        const sw = document.getElementById('sc-work');
+        const box = document.getElementById('work-box');
+        sw.classList.add('active');
+        box.innerHTML = `<h2 class="cyber-font text-2xl mb-4">INJECTING ${name}</h2><div class="w-12 h-12 border-4 border-t-transparent border-cyan-400 rounded-full animate-spin mx-auto"></div>`;
+        
+        setTimeout(() => {
+            sw.classList.remove('active');
+            alert(name + " ACTIVE!");
+        }, 3000);
     }
 </script>
-
 </body>
 </html>
-
