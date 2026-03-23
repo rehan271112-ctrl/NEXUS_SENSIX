@@ -3,210 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS KERNEL | V2.0 OFFICIAL</title>
+    <title>NEXUS KERNEL | BY HANZ X</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+        
         :root { --neon: #00f2ff; --admin: #ff003c; }
-        body { background: #050505; color: var(--neon); font-family: 'JetBrains Mono', monospace; overflow: hidden; }
+        
+        body { 
+            background: #000; 
+            color: var(--neon); 
+            font-family: 'Share Tech Mono', monospace; 
+            overflow: hidden; 
+            margin: 0; 
+        }
+
         .cyber-font { font-family: 'Orbitron', sans-serif; }
-        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
-        .admin-border { border: 1px solid var(--admin); box-shadow: 0 0 15px rgba(255, 0, 60, 0.2); }
-        .screen { display: none; height: 100vh; width: 100vw; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: #050505; }
+
+        /* Hacking Background Effect */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .screen { display: none; height: 100vh; width: 100vw; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: black; }
         .active { display: flex; }
-        input, select { background: rgba(0,0,0,0.7); border: 1px solid var(--neon); color: white; padding: 10px; outline: none; font-size: 12px; }
-        .btn-neon { background: var(--neon); color: black; font-weight: bold; transition: 0.3s; }
-        .btn-neon:hover { background: white; box-shadow: 0 0 20px var(--neon); }
-        .btn-admin { background: var(--admin); color: white; font-weight: bold; }
-        /* Global Alert */
-        #gb-alert { display: none; position: fixed; top: 20px; width: 90%; max-width: 400px; background: rgba(255,0,60,0.9); border: 1px solid white; padding: 15px; z-index: 1000; color: white; text-align: center; font-weight: bold; }
+
+        /* Glitch Animation */
+        .glitch {
+            position: relative;
+            animation: glitch 1s linear infinite;
+        }
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px, 0) skew(0deg); }
+            4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+            62% { transform: translate(0, 0) skew(5deg); }
+        }
+
+        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 15px var(--neon); }
+        .admin-border { border: 1px solid var(--admin); box-shadow: 0 0 15px var(--admin); }
+
+        input, select { 
+            background: rgba(0, 20, 20, 0.8); 
+            border: 1px solid var(--neon); 
+            color: white; 
+            padding: 12px; 
+            outline: none; 
+            width: 100%;
+        }
+
+        .btn-cyber {
+            background: var(--neon);
+            color: black;
+            font-weight: bold;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            text-transform: uppercase;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0% 30%);
+        }
+
+        /* Terminal Text */
+        #term-text { font-size: 10px; color: #0f0; margin-top: 20px; text-align: left; width: 250px; height: 50px; overflow: hidden; }
     </style>
 </head>
 <body>
 
-<div id="gb-alert" class="cyber-font">
-    <div id="gb-text">SYSTEM MESSAGE</div>
-    <button onclick="document.getElementById('gb-alert').style.display='none'" class="text-[8px] mt-2 underline">CLOSE</button>
-</div>
+<canvas id="matrix-bg"></canvas>
 
 <div id="sc-load" class="screen active">
-    <h1 class="cyber-font text-4xl neon-text mb-4 animate-pulse">NEXUS_KERNEL</h1>
-    <div class="w-64 h-1 bg-gray-900 overflow-hidden"><div id="bar" class="h-full bg-cyan-400 w-0 transition-all"></div></div>
-    <p id="tx-load" class="mt-4 text-[10px] tracking-widest">STABILIZING CORE...</p>
+    <div class="glitch cyber-font text-5xl font-bold tracking-tighter mb-2">NEXUS_KERNEL</div>
+    <div class="text-[10px] tracking-[5px] mb-8 opacity-50">BYPASSING SYSTEM SECURITY...</div>
+    
+    <div class="w-64 h-1 bg-gray-900 relative">
+        <div id="bar" class="h-full bg-cyan-400 w-0 shadow-[0_0_10px_#00f2ff]"></div>
+    </div>
+    
+    <div id="term-text"></div>
 </div>
 
 <div id="sc-auth" class="screen">
-    <div class="bg-black/90 p-8 neon-border w-[320px]">
-        <h2 id="auth-title" class="cyber-font text-center mb-6 neon-text">LOGIN ACCESS</h2>
-        <div id="auth-form" class="flex flex-col gap-4">
+    <div class="bg-black/90 p-8 neon-border w-[320px] backdrop-blur-md">
+        <h2 id="auth-title" class="cyber-font text-center mb-6 text-xl">IDENT_VERIFY</h2>
+        <div class="flex flex-col gap-4">
             <input type="text" id="usn" placeholder="USERNAME">
             <input type="password" id="pw" placeholder="PASSWORD">
-            <button onclick="handleAuth()" id="btn-main" class="btn-neon py-3">ACCESS SYSTEM</button>
-            <button onclick="toggleAuth()" id="btn-switch" class="text-[10px] opacity-50 underline">Belum punya akun? Register</button>
+            <button onclick="handleAuth()" id="btn-main" class="btn-cyber">EXECUTE LOGIN</button>
+            <button onclick="toggleAuth()" class="text-[9px] opacity-40 underline">REGISTER NEW NODE</button>
         </div>
     </div>
 </div>
 
-<div id="sc-user" class="screen p-6 overflow-y-auto block">
-    <div class="flex justify-between border-b border-cyan-900 pb-4 mb-6">
-        <div>
-            <h1 class="cyber-font text-xl neon-text">USER_PANEL</h1>
-            <p id="user-info" class="text-[10px] text-gray-400"></p>
-        </div>
-        <button onclick="location.reload()" class="text-red-500 text-xs border border-red-900 px-2">LOGOUT</button>
+<div id="sc-user" class="screen p-6 justify-start overflow-y-auto">
+    <div class="w-full max-w-lg border-b border-cyan-900 pb-4 mb-6 flex justify-between items-center">
+        <h1 class="cyber-font text-xl">MEMBER_DASHBOARD</h1>
+        <button onclick="location.reload()" class="text-red-500 text-[10px] border border-red-900 px-2">LOGOUT</button>
     </div>
-    <div class="grid grid-cols-1 gap-3">
-        <button onclick="runTool('PELICIN LAYAR')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[1] TOOLS PELICIN LAYAR</button>
-        <button onclick="runTool('EASY DRAG 66%')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[2] EASY DRAG 66%</button>
-        <button onclick="runTool('FPS CONTROLLERS')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[3] FPS CONTROLLERS (ANTI LAG)</button>
-        <button onclick="runTool('SMOOTH AIM')" class="p-4 bg-zinc-900 border border-cyan-900 text-left">[4] SMOOTH AIM</button>
-        <div class="grid grid-cols-2 gap-2">
-            <button onclick="runTool('FF MAX')" class="p-3 bg-red-900/20 border border-red-600 text-xs">OPEN FF MAX</button>
-            <button onclick="runTool('FF NORMAL')" class="p-3 bg-blue-900/20 border border-blue-600 text-xs">OPEN FF NORMAL</button>
+    
+    <div class="w-full max-w-lg grid gap-4">
+        <button onclick="runTool('PELICIN LAYAR')" class="p-4 bg-zinc-950 border border-cyan-900 text-left hover:bg-cyan-900/20">[1] PELICIN LAYAR</button>
+        <button onclick="runTool('EASY DRAG 66%')" class="p-4 bg-zinc-950 border border-cyan-900 text-left hover:bg-cyan-900/20">[2] EASY DRAG 66%</button>
+        <button onclick="runTool('FPS CONTROLLERS')" class="p-4 bg-zinc-950 border border-cyan-900 text-left hover:bg-cyan-900/20">[3] FPS CONTROLLERS (ANTI-LAG)</button>
+        
+        <div class="grid grid-cols-2 gap-4 mt-4">
+            <button onclick="openGame('max')" class="p-4 bg-red-900/30 border border-red-600 text-xs font-bold cyber-font">OPEN FF MAX</button>
+            <button onclick="openGame('normal')" class="p-4 bg-blue-900/30 border border-blue-600 text-xs font-bold cyber-font">OPEN FF NORMAL</button>
         </div>
     </div>
 </div>
 
-<div id="sc-admin" class="screen p-6 overflow-y-auto block">
-    <h1 class="cyber-font text-2xl text-red-500 mb-6 border-b-2 border-red-600">OWNER_CENTRAL</h1>
-    <div class="grid gap-4">
-        <div class="p-4 admin-border bg-zinc-950 space-y-3">
-            <h3 class="text-xs font-bold text-red-500">CREATE ACCOUNT (MEMBER/OWNER)</h3>
-            <input type="text" id="new-u" placeholder="New Username" class="w-full border-red-900">
-            <input type="password" id="new-p" placeholder="New Password" class="w-full border-red-900">
-            <select id="new-r" class="w-full border-red-900 bg-black">
-                <option value="user">ROLE: MEMBER</option>
-                <option value="admin">ROLE: OWNER</option>
-            </select>
-            <input type="date" id="new-e" class="w-full border-red-900">
-            <button onclick="createAccount()" class="w-full btn-admin py-2">GENERATE KEY</button>
-        </div>
-        <div class="p-4 admin-border bg-zinc-950">
-            <h3 class="text-xs font-bold text-cyan-500 mb-2">PESAN GLOBAL</h3>
-            <input type="text" id="msg-input" placeholder="Tulis pesan..." class="w-full mb-2 border-cyan-900">
-            <button onclick="sendGlobal()" class="w-full bg-cyan-700 text-black font-bold py-1">KIRIM PESAN</button>
-        </div>
-        <button onclick="toggleSrv()" id="srv-btn" class="p-3 bg-green-900 border border-green-500 text-xs">SERVER: ONLINE</button>
+<div id="sc-admin" class="screen p-6 justify-start overflow-y-auto">
+    <div class="w-full max-w-3xl border-b-2 border-red-600 pb-2 mb-6 flex justify-between items-center">
+        <h1 class="cyber-font text-2xl text-red-500">OWNER_CENTRAL</h1>
+        <button onclick="location.reload()" class="bg-red-700 text-white px-4 py-1 text-xs">EXIT</button>
     </div>
-</div>
-
-<div id="sc-work" class="screen bg-black/95 z-[999]">
-    <div id="work-box" class="text-center"></div>
+    
+    <div class="w-full max-w-3xl grid md:grid-cols-2 gap-6">
+        <div class="p-4 admin-border bg-black space-y-3">
+            <h3 class="text-xs text-red-500 font-bold">LICENSE GENERATOR</h3>
+            <input type="text" id="new-u" placeholder="New Username">
+            <input type="password" id="new-p" placeholder="New Password">
+            <select id="new-r"><option value="user">MEMBER</option><option value="admin">OWNER</option></select>
+            <input type="date" id="new-e">
+            <button onclick="createAccount()" class="bg-red-600 text-white w-full py-2 font-bold">GENERATE KEY</button>
+        </div>
+        
+        <div class="p-4 admin-border bg-black">
+            <h3 class="text-xs text-cyan-500 font-bold mb-2">BROADCAST MESSAGE</h3>
+            <textarea id="msg-input" placeholder="Type message..." class="w-full h-24 bg-zinc-900 border border-cyan-900 text-white p-2 text-xs mb-2 outline-none"></textarea>
+            <button onclick="alert('Pesan Terkirim!')" class="btn-cyber text-xs">SEND BROADCAST</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // --- DATABASE (Local Storage) ---
-    if(!localStorage.getItem('nexus_users')) {
-        const initialUsers = [{u: "hanzX", p: "rehanganteng", r: "admin", e: "2099-12-31"}];
-        localStorage.setItem('nexus_users', JSON.stringify(initialUsers));
+    // --- MATRIX BACKGROUND ---
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
+    const fontSize = 10;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0f0"; ctx.font = fontSize + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters.charAt(Math.floor(Math.random() * letters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 33);
+
+    // --- LOADING SYSTEM ---
+    const termLines = [
+        "> Initializing Kernel...",
+        "> Searching for nodes...",
+        "> Bypass Firewall: SUCCESS",
+        "> Brute Forcing Data: 88%",
+        "> Access Granted...",
+        "> Welcome Admin Hanz X"
+    ];
+
+    window.onload = () => {
+        let b = document.getElementById('bar'), p = 0, t = document.getElementById('term-text');
+        let lineIdx = 0;
+        let itv = setInterval(() => {
+            p += 2; b.style.width = p+'%';
+            if(p % 20 === 0) {
+                t.innerHTML += termLines[lineIdx] + "<br>";
+                lineIdx++;
+            }
+            if(p >= 100) { clearInterval(itv); show('sc-auth'); }
+        }, 50);
     }
 
-    let isReg = false;
-    const getUsers = () => JSON.parse(localStorage.getItem('nexus_users'));
-    const saveUsers = (data) => localStorage.setItem('nexus_users', JSON.stringify(data));
+    // --- DATABASE ---
+    const DB_NAME = 'nexus_official_db';
+    if(!localStorage.getItem(DB_NAME)) {
+        localStorage.setItem(DB_NAME, JSON.stringify([{u: "hanzX", p: "rehanganteng", r: "admin", e: "2030-12-31"}]));
+    }
 
     function show(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
     }
 
-    // --- LOADING ---
-    window.onload = () => {
-        let b = document.getElementById('bar'), p = 0;
-        let itv = setInterval(() => {
-            p += 4; b.style.width = p+'%';
-            if(p >= 100) { clearInterval(itv); show('sc-auth'); checkGlobal(); }
-        }, 30);
-    }
-
-    // --- AUTH LOGIC ---
+    // --- AUTHENTICATION ---
+    let isReg = false;
     function toggleAuth() {
         isReg = !isReg;
-        document.getElementById('auth-title').innerText = isReg ? "REGISTER" : "LOGIN ACCESS";
-        document.getElementById('btn-main').innerText = isReg ? "CREATE ACCOUNT" : "ACCESS SYSTEM";
-        document.getElementById('btn-switch').innerText = isReg ? "Sudah punya akun? Login" : "Belum punya akun? Register";
+        document.getElementById('auth-title').innerText = isReg ? "REGISTER_NODE" : "IDENT_VERIFY";
     }
 
     function handleAuth() {
         const u = document.getElementById('usn').value;
         const p = document.getElementById('pw').value;
-        const db = getUsers();
+        const db = JSON.parse(localStorage.getItem(DB_NAME));
 
         if(isReg) {
-            if(db.find(x => x.u === u)) return alert("Username sudah ada!");
             db.push({u: u, p: p, r: "user", e: "2026-12-31"});
-            saveUsers(db);
-            alert("Register Berhasil! Silakan Login.");
-            toggleAuth();
+            localStorage.setItem(DB_NAME, JSON.stringify(db));
+            alert("Node Registered! Please Login."); toggleAuth();
         } else {
             const user = db.find(x => x.u === u && x.p === p);
             if(user) {
-                const now = new Date();
-                const exp = new Date(user.e);
-                if(now > exp) return alert("Akun anda sudah EXPIRED!");
-                
-                if(user.r === 'admin') {
-                    show('sc-admin');
-                } else {
-                    document.getElementById('user-info').innerText = "User: "+user.u+" | Exp: "+user.e;
-                    show('sc-user');
-                }
-            } else {
-                alert("DATA SALAH / TIDAK TERDAFTAR!");
-            }
+                if(user.r === 'admin') show('sc-admin');
+                else show('sc-user');
+            } else { alert("ACCESS DENIED!"); }
         }
     }
 
-    // --- ADMIN ACTIONS ---
-    function createAccount() {
-        const u = document.getElementById('new-u').value;
-        const p = document.getElementById('new-p').value;
-        const r = document.getElementById('new-r').value;
-        const e = document.getElementById('new-e').value;
-        if(!u || !p || !e) return alert("Isi semua data!");
-
-        const db = getUsers();
-        db.push({u: u, p: p, r: r, e: e});
-        saveUsers(db);
-        alert("Account "+u+" ("+r+") Berhasil Dibuat!");
-    }
-
-    function sendGlobal() {
-        const m = document.getElementById('msg-input').value;
-        localStorage.setItem('nexus_msg', m);
-        alert("Pesan Terkirim!");
-    }
-
-    function checkGlobal() {
-        const m = localStorage.getItem('nexus_msg');
-        if(m) {
-            document.getElementById('gb-alert').style.display = 'block';
-            document.getElementById('gb-text').innerText = m;
-        }
-    }
-
-    function toggleSrv() {
-        const b = document.getElementById('srv-btn');
-        if(b.innerText.includes("ONLINE")) {
-            b.innerText = "SERVER: OFFLINE";
-            b.className = "p-3 bg-red-900 border border-red-500 text-xs";
+    // --- FITUR BUKA GAME ---
+    function openGame(type) {
+        alert("SISTEM: Membuka Free Fire...");
+        if(type === 'max') {
+            // Skema Android untuk FF MAX
+            window.location.href = "intent://#Intent;package=com.dts.freefiremax;end";
         } else {
-            b.innerText = "SERVER: ONLINE";
-            b.className = "p-3 bg-green-900 border border-green-500 text-xs";
+            // Skema Android untuk FF Biasa
+            window.location.href = "intent://#Intent;package=com.dts.freefireth;end";
         }
     }
 
-    // --- USER TOOLS ---
     function runTool(name) {
-        const sw = document.getElementById('sc-work');
-        const box = document.getElementById('work-box');
-        sw.classList.add('active');
-        box.innerHTML = `<h2 class="cyber-font text-2xl mb-4">INJECTING ${name}</h2><div class="w-12 h-12 border-4 border-t-transparent border-cyan-400 rounded-full animate-spin mx-auto"></div>`;
-        
-        setTimeout(() => {
-            sw.classList.remove('active');
-            alert(name + " ACTIVE!");
-        }, 3000);
+        alert(`CMD: ${name} EXECUTED! 100% WORK.`);
+    }
+
+    function createAccount() {
+        const u = document.getElementById('new-u').value, p = document.getElementById('new-p').value,
+              r = document.getElementById('new-r').value, e = document.getElementById('new-e').value;
+        if(!u || !p || !e) return alert("Empty fields!");
+        const db = JSON.parse(localStorage.getItem(DB_NAME));
+        db.push({u,p,r,e});
+        localStorage.setItem(DB_NAME, JSON.stringify(db));
+        alert("Account Generated!");
     }
 </script>
 </body>
