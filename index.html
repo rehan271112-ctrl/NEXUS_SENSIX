@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS KERNEL | V2.0 OFFICIAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap');
+
+        :root {
+            --neon-cyan: #00f2ff;
+            --rog-red: #ff003c;
+        }
+
+        body {
+            background-color: #050505;
+            color: var(--neon-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .cyber-font { font-family: 'Orbitron', sans-serif; }
+        
+        .neon-border {
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+        }
+
+        .neon-text { text-shadow: 0 0 10px var(--neon-cyan); }
+
+        /* ROG Monitor Style */
+        .rog-monitor {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(5, 5, 5, 0.98) 100%);
+            border-left: 4px solid var(--rog-red);
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 92% 100%, 0 100%);
+            padding: 12px;
+            min-width: 180px;
+            z-index: 100;
+            display: none;
+        }
+
+        /* Animations */
+        .screen { display: none; }
+        .active { display: flex; }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan);
+            animation: scan 2s linear infinite;
+        }
+
+        input {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--neon-cyan);
+            color: white;
+            padding: 12px;
+            outline: none;
+            font-size: 0.8rem;
+        }
+
+        button {
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        button:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+<div id="rog-dashboard" class="fixed top-5 right-5 rog-monitor flex-col gap-3">
+    <div class="flex items-center justify-between">
+        <span class="text-[10px] font-bold text-white cyber-font">ROG_SYSTEM_OS</span>
+        <div class="w-2 h-2 rounded-full bg-red-600 animate-ping"></div>
+    </div>
+    <div class="space-y-2">
+        <div>
+            <div class="flex justify-between text-[10px] mb-1"><span>FPS</span><span id="mon-fps" class="text-white">60</span></div>
+            <div class="h-[2px] bg-gray-800"><div id="bar-fps" class="h-full bg-red-600 shadow-[0_0_5px_red]" style="width: 90%"></div></div>
+        </div>
+        <div>
+            <div class="flex justify-between text-[10px] mb-1"><span>TEMP</span><span id="mon-temp" class="text-white">37°C</span></div>
+            <div class="h-[2px] bg-gray-800"><div id="bar-temp" class="h-full bg-cyan-500 shadow-[0_0_5px_cyan]" style="width: 40%"></div></div>
+        </div>
+        <div>
+            <div class="flex justify-between text-[10px] mb-1"><span>CPU</span><span id="mon-cpu" class="text-white">24%</span></div>
+            <div class="h-[2px] bg-gray-800"><div id="bar-cpu" class="h-full bg-white" style="width: 24%"></div></div>
+        </div>
+    </div>
+</div>
+
+<div id="screen-load" class="screen active fixed inset-0 flex-col items-center justify-center bg-black z-[200]">
+    <div class="relative mb-10">
+        <h1 class="cyber-font text-5xl font-bold neon-text tracking-tighter">NEXUS_KERNEL</h1>
+        <div class="absolute -bottom-2 left-0 w-full h-1 bg-cyan-900 overflow-hidden">
+            <div id="load-bar" class="h-full bg-cyan-400 w-0 transition-all duration-100"></div>
+        </div>
+    </div>
+    <p id="load-text" class="text-[10px] tracking-[0.5em] animate-pulse">BOOTING SYSTEM...</p>
+</div>
+
+<div id="screen-auth" class="screen fixed inset-0 flex-col items-center justify-center">
+    <div class="bg-black/90 p-8 neon-border w-[320px] relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-cyan-500 shadow-lg"></div>
+        <h2 class="cyber-font text-xl text-center mb-8 neon-text uppercase">Identity Verification</h2>
+        <div class="flex flex-col gap-4">
+            <input type="text" id="usn" placeholder="USERNAME">
+            <input type="password" id="pw" placeholder="PASSWORD">
+            <button onclick="doLogin()" class="bg-cyan-600 hover:bg-cyan-400 text-black py-3">Access Database</button>
+            <p class="text-[9px] text-center opacity-50">BY HANZ X - ENCRYPTED V2.0</p>
+        </div>
+    </div>
+</div>
+
+<div id="screen-working" class="screen fixed inset-0 flex-col items-center justify-center bg-black/95 z-[150]">
+    <div id="work-ui" class="text-center">
+        </div>
+</div>
+
+<div id="screen-user" class="screen flex-col p-6 w-full max-w-lg mx-auto overflow-y-auto">
+    <div class="border-b border-cyan-900 pb-4 mb-6 flex justify-between items-end">
+        <div>
+            <h1 class="cyber-font text-2xl neon-text">USER_PANEL</h1>
+            <p class="text-[10px] text-gray-500">License Status: <span class="text-green-500">ACTIVE</span></p>
+        </div>
+        <button onclick="location.reload()" class="text-[10px] text-red-500 border border-red-900 px-2 py-1">LOGOUT</button>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3">
+        <button onclick="execTool('PELICIN LAYAR', 'MATRIX')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
+            <span>[1] TOOLS PELICIN LAYAR</span> <span class="text-cyan-500">OFF</span>
+        </button>
+        <button onclick="execTool('EASY DRAG 66%', 'SCAN')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
+            <span>[2] EASY DRAG 66%</span> <span class="text-cyan-500">OFF</span>
+        </button>
+        <button onclick="execTool('SENSIBILITY SCREEN', 'HEX')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
+            <span>[3] SENSIBILITY SCREEN</span> <span class="text-cyan-500">OFF</span>
+        </button>
+        <button onclick="execTool('FPS CONTROLLER', 'PULSE')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
+            <span>[4] FPS CONTROLLER (ANTI LAG)</span> <span class="text-cyan-500">OFF</span>
+        </button>
+        <button onclick="execTool('SMOOTH AIM', 'TARGET')" class="p-4 bg-gray-950 border border-cyan-900 hover:border-cyan-400 text-left text-sm flex justify-between">
+            <span>[5] SMOOTH AIM</span> <span class="text-cyan-500">OFF</span>
+        </button>
+        <button onclick="alert('NEXUS KERNEL V2\nCreated by: HanzX\nStatus: Beta v2.0')" class="p-4 bg-gray-950 border border-cyan-900 text-left text-sm">
+            [5] INFORMASI TENTANG SCRIPT
+        </button>
+        <div class="grid grid-cols-2 gap-2 mt-2">
+            <button onclick="execTool('FREE FIRE MAX', 'GAME')" class="p-3 bg-red-900/20 border border-red-600 text-[10px]">OPEN FF MAX</button>
+            <button onclick="execTool('FREE FIRE NORMAL', 'GAME')" class="p-3 bg-blue-900/20 border border-blue-600 text-[10px]">OPEN FF NORMAL</button>
+        </div>
+    </div>
+</div>
+
+<div id="screen-admin" class="screen flex-col p-6 w-full max-w-2xl mx-auto overflow-y-auto">
+    <div class="border-b-2 border-red-600 pb-2 mb-6">
+        <h1 class="cyber-font text-3xl text-red-500">ADMIN_PANEL_V2</h1>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-zinc-900 p-4 border border-red-900 space-y-3">
+            <h3 class="text-xs font-bold text-red-500 uppercase">User Control</h3>
+            <input type="text" id="adm-target" placeholder="Target Username" class="w-full border-red-900">
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="adm('RESET')" class="bg-red-900 text-[10px] py-2">RESET TO LOGIN</button>
+                <button onclick="adm('KICK')" class="bg-red-600 text-black text-[10px] py-2">TENDANG USER</button>
+                <button onclick="adm('INFO')" class="bg-zinc-800 text-[10px] py-2">INFO AKUN</button>
+                <button onclick="adm('EDIT')" class="bg-zinc-800 text-[10px] py-2">EDIT PASSWORD</button>
+            </div>
+        </div>
+
+        <div class="bg-zinc-900 p-4 border border-yellow-700 space-y-3">
+            <h3 class="text-xs font-bold text-yellow-600 uppercase">License Generator</h3>
+            <input type="text" placeholder="New Username" class="w-full border-yellow-900">
+            <input type="date" class="w-full border-yellow-900">
+            <button onclick="adm('CREATE')" class="w-full bg-yellow-600 text-black text-xs py-2 uppercase font-bold">Create Account</button>
+        </div>
+
+        <div class="bg-zinc-900 p-4 border border-blue-900 col-span-full flex items-center justify-between">
+            <span class="text-xs">SERVER STATUS: <b id="srv-stat" class="text-green-500">ONLINE</b></span>
+            <button onclick="toggleSrv()" class="bg-blue-900 px-4 py-1 text-xs">TOGGLE ON/OFF</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- APP STATE ---
+    const screens = ['screen-load', 'screen-auth', 'screen-user', 'screen-admin', 'screen-working'];
+    
+    function showScreen(id) {
+        screens.forEach(s => document.getElementById(s).style.display = 'none');
+        document.getElementById(id).style.display = 'flex';
+    }
+
+    // --- INITIAL LOADING ---
+    window.addEventListener('DOMContentLoaded', () => {
+        let bar = document.getElementById('load-bar');
+        let txt = document.getElementById('load-text');
+        let width = 0;
+        
+        const tasks = ["BYPASSING KERNEL...", "LOADING MODULES...", "CLEANING LOGS...", "NEXUS READY"];
+        
+        const interval = setInterval(() => {
+            width += 1.5;
+            bar.style.width = width + '%';
+            if(width > 25) txt.innerText = tasks[1];
+            if(width > 60) txt.innerText = tasks[2];
+            if(width > 90) txt.innerText = tasks[3];
+            
+            if(width >= 100) {
+                clearInterval(interval);
+                showScreen('screen-auth');
+            }
+        }, 40);
+    });
+
+    // --- LOGIN SYSTEM ---
+    function doLogin() {
+        const u = document.getElementById('usn').value;
+        const p = document.getElementById('pw').value;
+
+        if(u === "hanzX" && p === "rehanganteng") {
+            alert("ADMIN ACCESS GRANTED");
+            startRogMonitor();
+            showScreen('screen-admin');
+        } else if(u !== "" && p !== "") {
+            alert("ACCESS GRANTED");
+            startRogMonitor();
+            showScreen('screen-user');
+        } else {
+            alert("FIELD CANNOT BE EMPTY");
+        }
+    }
+
+    // --- ROG MONITOR LOGIC ---
+    function startRogMonitor() {
+        document.getElementById('rog-dashboard').style.display = 'flex';
+        setInterval(() => {
+            // FPS Logic
+            const fps = Math.floor(Math.random() * (62 - 58 + 1)) + 58;
+            document.getElementById('mon-fps').innerText = fps;
+            document.getElementById('bar-fps').style.width = (fps/60*100) + '%';
+            
+            // Temp Logic
+            const temp = Math.floor(Math.random() * (43 - 36 + 1)) + 36;
+            document.getElementById('mon-temp').innerText = temp + '°C';
+            const tBar = document.getElementById('bar-temp');
+            tBar.style.width = (temp/60*100) + '%';
+            tBar.style.backgroundColor = temp > 40 ? '#ff003c' : '#00f2ff';
+
+            // CPU Logic
+            const cpu = Math.floor(Math.random() * 40) + 10;
+            document.getElementById('mon-cpu').innerText = cpu + '%';
+            document.getElementById('bar-cpu').style.width = cpu + '%';
+        }, 1500);
+    }
+
+    // --- FEATURES EXECUTION ---
+    function execTool(name, type) {
+        const loader = document.getElementById('screen-working');
+        const box = document.getElementById('work-ui');
+        loader.style.display = 'flex';
+        
+        let anim = '';
+        if(type === 'MATRIX') {
+            anim = `<div class="text-xs text-green-500 font-mono space-y-1">
+                <div>> INJECTING_PELICIN...</div>
+                <div class="animate-pulse">0101011010101</div>
+                <div class="animate-pulse">1101001010110</div>
+            </div>`;
+        } else if(type === 'SCAN') {
+            anim = `<div class="w-48 h-48 border-4 border-cyan-500 relative flex items-center justify-center">
+                <div class="scan-line"></div>
+                <span class="text-xs">SCANNING SCREEN...</span>
+            </div>`;
+        } else if(type === 'HEX') {
+            anim = `<div class="w-16 h-16 border-4 border-t-transparent border-cyan-400 rounded-full animate-spin"></div>
+            <p class="mt-4 text-xs">RECALIBRATING SENSITIVITY...</p>`;
+        } else {
+            anim = `<div class="cyber-font text-2xl animate-bounce">EXECUTING...</div>`;
+        }
+
+        box.innerHTML = `<h2 class="text-xl cyber-font mb-6 text-white">${name}</h2> ${anim}`;
+
+        setTimeout(() => {
+            loader.style.display = 'none';
+            alert(name + " SUCCESSFULLY ACTIVATED!");
+        }, 3000);
+    }
+
+    // --- ADMIN TOOLS ---
+    function adm(act) {
+        const target = document.getElementById('adm-target').value || "USER_UNKNOWN";
+        alert("ADMIN COMMAND: " + act + "\nTARGET: " + target + "\nSTATUS: 100% SUCCESS");
+    }
+
+    function toggleSrv() {
+        const s = document.getElementById('srv-stat');
+        if(s.innerText === "ONLINE") {
+            s.innerText = "OFFLINE";
+            s.className = "text-red-500";
+        } else {
+            s.innerText = "ONLINE";
+            s.className = "text-green-500";
+        }
+    }
+</script>
+
+</body>
+</html>
